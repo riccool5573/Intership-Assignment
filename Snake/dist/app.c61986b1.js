@@ -50243,12 +50243,12 @@ var canvas = document.getElementById("canvas");
 var score = 0;
 var headPos;
 var applePos;
-var Snake = new Array(5);
+var Snake = new Array();
 exports.rows = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 exports.collumns = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 var head = new Snake_1.SnakeSegment();
 var apple = new Apple_1.Apple();
-var body = new Snake_1.SnakeSegment();
+var body = new Array();
 exports.app = new PIXI.Application({
   backgroundColor: 0xffffff,
   view: canvas
@@ -50302,16 +50302,31 @@ function main() {
     }
 
     headPos = head.GetPosition();
+    Snake.unshift(headPos);
+
+    for (var i in body) {
+      var x = parseInt(i);
+      var position = Snake[x + 1];
+      body[x].row = position[0];
+      body[x].collumn = position[1];
+      body[x].UpdatePosition();
+      console.log(body[x].position);
+      console.log(headPos);
+
+      if (body[x].position[0] == headPos[0] && body[x].position[1] == headPos[1]) {
+        alert("dead");
+        console.log("burh");
+      }
+    }
+
     applePos = apple.GetPosition();
-    console.log(Snake);
-    Snake.push(headPos);
-    console.log(headPos);
-    console.log(applePos);
 
     if (headPos[0] == applePos[0] && headPos[1] == applePos[1]) {
       apple.Delete();
       score++;
-      body.Draw("http://127.0.0.1:8887/body_vertical.png");
+      var segment = new Snake_1.SnakeSegment();
+      body.unshift(segment);
+      body[0].Draw("http://127.0.0.1:8887/body_vertical.png");
     }
   }
 }
@@ -50343,7 +50358,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63984" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64929" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

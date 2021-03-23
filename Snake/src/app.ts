@@ -1,5 +1,5 @@
 import {SnakeSegment} from './Snake';
-import {Apple} from "./Apple";
+import {Apple} from './Apple';
 import * as PIXI from 'pixi.js';
 
 let framesSinceLastUpdate: number = 0; //A timer to keep track of how many frames it's been since the last tick
@@ -7,12 +7,12 @@ var canvas: any = document.getElementById("canvas"); // getting the canvas, spen
 let score: number = 0;
 let headPos: number[]; //the positions on the rows and collumns for the head and the apples
 let applePos: number[];
-let Snake: Array<Array<number>> = new Array(5);
+let Snake: Array<Array<number>> = new Array();
 export const rows: number[] = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0); //make 21 long arrays for rows and numbers, which will serve as our grid
 export const collumns: number[] = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0); //i've got honestly no clue how i'd make a 21 long array. it doesnt help that nowhere i can find an example of this.
 let head: SnakeSegment = new SnakeSegment(); //create the head of the snake
 let apple: Apple = new Apple();
-let body: SnakeSegment = new SnakeSegment();
+let body: Array<SnakeSegment> = new Array(); 
 
 export const app = new PIXI.Application({
     backgroundColor: 0xffffff,
@@ -22,7 +22,7 @@ export const app = new PIXI.Application({
 
 
 function init(){
-    
+
     for (let i in rows){ //assign the values for each one of in the arrays in a for loop
         var x = parseInt(i);
         rows[i] = app.screen.height/21 * (x + 1);
@@ -57,25 +57,39 @@ function main(){ //the main function keeps track of the game speed, the players 
     }
     window.requestAnimationFrame(main); //run main every frame.
     if(framesSinceLastUpdate < 60 / speed){ //check if the game should tick
-        framesSinceLastUpdate += 1;
+        framesSinceLastUpdate += 1; //making game speed dependent on FPS is stupid i know, but it's the easiest way for this, and FPS shouldn't be much of an issue
     }
     else{//and if it does reset the counter to 0
         framesSinceLastUpdate = 0;
         temp = head.GetTemp();
+        
         head.Move(temp);
         if(!apple.spawned && apple.sprite != null){ //check if an apple has been spawned, and if not spawn one
             apple.Spawn(); //spawn the apple
         }
-        headPos = head.GetPosition(); //get the position of the head an the apple
+        headPos = head.GetPosition(); //get the position of the head and the apple
+        Snake.unshift(headPos); //push the position of the head, for later use in the body
+        for (let i in body){
+            let x: number = parseInt(i);
+            let position: Array<number> = Snake[x + 1]; 
+            body[x].row = position[0];
+            body[x].collumn = position[1];
+            body[x].UpdatePosition();
+            console.log(body[x].position);
+            console.log(headPos);
+            if(body[x].position[0] == headPos[0] && body[x].position[1] == headPos[1]){
+                alert("dead");
+                console.log("burh");
+            }
+        }
+        
         applePos = apple.GetPosition();
-        console.log(Snake);
-        Snake.push(headPos); //push the position of the head, for later use in the body
-        console.log(headPos);
-        console.log(applePos);
         if (headPos[0] == applePos[0] && headPos[1] == applePos[1]){ //compare them and see if they're on the same position (does not work flawlessly, but it'll do)
             apple.Delete();
             score++;
-            body.Draw("http://127.0.0.1:8887/body_vertical.png");
+            let segment: SnakeSegment = new SnakeSegment();
+            body.unshift(segment);
+            body[0].Draw("http://127.0.0.1:8887/body_vertical.png");
         }
     }
 }
