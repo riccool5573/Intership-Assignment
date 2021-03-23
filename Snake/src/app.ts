@@ -7,12 +7,13 @@ var canvas: any = document.getElementById("canvas"); // getting the canvas, spen
 let score: number = 0;
 let headPos: number[]; //the positions on the rows and collumns for the head and the apples
 let applePos: number[];
-let Snake: Array<Array<number>>;
+let Snake: Array<Array<number>> = new Array(5);
 export const rows: number[] = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0); //make 21 long arrays for rows and numbers, which will serve as our grid
 export const collumns: number[] = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0); //i've got honestly no clue how i'd make a 21 long array. it doesnt help that nowhere i can find an example of this.
 let head: SnakeSegment = new SnakeSegment(); //create the head of the snake
 let apple: Apple = new Apple();
 let body: SnakeSegment = new SnakeSegment();
+
 export const app = new PIXI.Application({
     backgroundColor: 0xffffff,
     view: canvas, //set the view to the canvas.
@@ -34,7 +35,7 @@ function init(){
         console.log(collumns[i]);
     }
 
-    head.Draw("http://192.168.2.193:8887/body.png"); //draw the head of the snake, taken from a local webserver as pixi cant load local files (update, webserver is now online)
+    head.Draw("http://127.0.0.1:8887/body.png"); //draw the head of the snake, taken from a local webserver as pixi cant load local files (update, webserver is now online)
     
     main(); //run main the first time
 }
@@ -49,7 +50,10 @@ function main(){ //the main function keeps track of the game speed, the players 
         speed = standardSpeed;
     }
     else{
-        speed = standardSpeed * (score/2);
+        speed = standardSpeed * score;
+    }
+    if(!app.loader.loading && apple.sprite == null){ //make sure the loader is not still loading anything, and then make sure the apple sprite has not been instanciated yet
+        apple.Draw("http://127.0.0.1:8887/apple.png");
     }
     window.requestAnimationFrame(main); //run main every frame.
     if(framesSinceLastUpdate < 60 / speed){ //check if the game should tick
@@ -59,31 +63,19 @@ function main(){ //the main function keeps track of the game speed, the players 
         framesSinceLastUpdate = 0;
         temp = head.GetTemp();
         head.Move(temp);
-        if(!apple.spawned){ //check if an apple has been spawned, and if not spawn one
+        if(!apple.spawned && apple.sprite != null){ //check if an apple has been spawned, and if not spawn one
             apple.Spawn(); //spawn the apple
         }
         headPos = head.GetPosition(); //get the position of the head an the apple
         applePos = apple.GetPosition();
+        console.log(Snake);
         Snake.push(headPos); //push the position of the head, for later use in the body
         console.log(headPos);
         console.log(applePos);
-        if (headPos[1] == applePos[1]){ //compare them and see if they're on the same position (does not work flawlessly, but it'll do)
+        if (headPos[0] == applePos[0] && headPos[1] == applePos[1]){ //compare them and see if they're on the same position (does not work flawlessly, but it'll do)
             apple.Delete();
             score++;
-            body.Draw("http://192.168.2.193:8887/body_vertical.png");
-            
-        }
-        
-
-    }
-    if(!app.loader.loading){ //make sure the loader is not still loading anything, and then make sure the apple sprite has not been instanciated yet
-        if(apple.sprite == null){
-            apple.Draw("http://192.168.2.193:8887/apple.png");
+            body.Draw("http://127.0.0.1:8887/body_vertical.png");
         }
     }
-
 }
-
-
-
-

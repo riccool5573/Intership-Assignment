@@ -50243,10 +50243,12 @@ var canvas = document.getElementById("canvas");
 var score = 0;
 var headPos;
 var applePos;
+var Snake = new Array(5);
 exports.rows = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 exports.collumns = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 var head = new Snake_1.SnakeSegment();
 var apple = new Apple_1.Apple();
+var body = new Snake_1.SnakeSegment();
 exports.app = new PIXI.Application({
   backgroundColor: 0xffffff,
   view: canvas
@@ -50265,7 +50267,7 @@ function init() {
     console.log(exports.collumns[_i]);
   }
 
-  head.Draw("http://192.168.2.193:8887/body.png");
+  head.Draw("http://127.0.0.1:8887/body.png");
   main();
 }
 
@@ -50279,7 +50281,11 @@ function main() {
   if (score == 0 || score == null) {
     speed = standardSpeed;
   } else {
-    speed = standardSpeed * (score / 2);
+    speed = standardSpeed * score;
+  }
+
+  if (!exports.app.loader.loading && apple.sprite == null) {
+    apple.Draw("http://127.0.0.1:8887/apple.png");
   }
 
   window.requestAnimationFrame(main);
@@ -50291,26 +50297,21 @@ function main() {
     temp = head.GetTemp();
     head.Move(temp);
 
-    if (!apple.spawned) {
+    if (!apple.spawned && apple.sprite != null) {
       apple.Spawn();
     }
 
     headPos = head.GetPosition();
     applePos = apple.GetPosition();
+    console.log(Snake);
+    Snake.push(headPos);
     console.log(headPos);
     console.log(applePos);
 
-    if (headPos[1] == applePos[1]) {
+    if (headPos[0] == applePos[0] && headPos[1] == applePos[1]) {
       apple.Delete();
       score++;
-      var body = new Snake_1.SnakeSegment();
-      body.Draw("http://192.168.2.193:8887/body_vertical.png");
-    }
-  }
-
-  if (!exports.app.loader.loading) {
-    if (apple.sprite == null) {
-      apple.Draw("http://192.168.2.193:8887/apple.png");
+      body.Draw("http://127.0.0.1:8887/body_vertical.png");
     }
   }
 }
@@ -50342,7 +50343,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55980" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63984" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
