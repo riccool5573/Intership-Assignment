@@ -38,7 +38,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
                 this.row--;
                 this.sprite.angle = 0;
                 if(this.row <= 0){
-                    EndGame();
+                    EndGame(); //if the player goes off the grid, game ends
                 } 
                 this.UpdatePosition();
                 break;
@@ -75,6 +75,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
         this.sprite.position.y = this.y;
         this.position = [this.row, this.collumn];
     }
+    //could've probably made draw a function within app.ts and exported it to the other scripts, but got no time to refactor
     Draw(URL: string){
         //From my research and being stuck on this for about 4 hours, it would seem that for whatever reason
         //pixi can't load local images, even when just using the basic code given by the documentation,
