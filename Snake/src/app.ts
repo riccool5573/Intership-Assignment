@@ -35,7 +35,7 @@ function init(){
         console.log(collumns[i]);
     }
 
-    head.Draw("http://127.0.0.1:8887/body.png"); //draw the head of the snake, taken from a local webserver as pixi cant load local files (update, webserver is now online)
+    head.Draw("http://192.168.2.200:8887/body.png"); //draw the head of the snake, taken from a local webserver as pixi cant load local files (update, webserver is now online)
     
     main(); //run main the first time
 }
@@ -53,7 +53,7 @@ function main(){ //the main function keeps track of the game speed, the players 
         speed = standardSpeed * score;
     }
     if(!app.loader.loading && apple.sprite == null){ //make sure the loader is not still loading anything, and then make sure the apple sprite has not been instanciated yet
-        apple.Draw("http://127.0.0.1:8887/apple.png");
+        apple.Draw("http://192.168.2.200:8887/apple.png");
     }
     window.requestAnimationFrame(main); //run main every frame.
     if(framesSinceLastUpdate < 60 / speed){ //check if the game should tick
@@ -84,7 +84,7 @@ function main(){ //the main function keeps track of the game speed, the players 
             score++;
             let segment: SnakeSegment = new SnakeSegment();
             body.unshift(segment); //add the bodypart to the array
-            body[0].Draw("http://127.0.0.1:8887/body_vertical.png"); //and render it
+            body[0].Draw("http://192.168.2.200:8887/body_vertical.png"); //and render it
         }
     }
 }
