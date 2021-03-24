@@ -50027,7 +50027,7 @@ var SnakeSegment = /*#__PURE__*/function () {
           this.sprite.angle = 0;
 
           if (this.row <= 0) {
-            alert("dead");
+            app_1.EndGame();
           }
 
           this.UpdatePosition();
@@ -50038,7 +50038,7 @@ var SnakeSegment = /*#__PURE__*/function () {
           this.sprite.angle = 90;
 
           if (this.collumn > 21) {
-            alert("dead");
+            app_1.EndGame();
           }
 
           this.UpdatePosition();
@@ -50049,7 +50049,7 @@ var SnakeSegment = /*#__PURE__*/function () {
           this.sprite.angle = 180;
 
           if (this.row > 21) {
-            alert("dead");
+            app_1.EndGame();
           }
 
           this.UpdatePosition();
@@ -50060,7 +50060,7 @@ var SnakeSegment = /*#__PURE__*/function () {
           this.sprite.angle = 270;
 
           if (this.collumn <= 0) {
-            alert("dead");
+            app_1.EndGame();
           }
 
           this.UpdatePosition();
@@ -50310,12 +50310,9 @@ function main() {
       body[x].row = position[0];
       body[x].collumn = position[1];
       body[x].UpdatePosition();
-      console.log(body[x].position);
-      console.log(headPos);
 
       if (body[x].position[0] == headPos[0] && body[x].position[1] == headPos[1]) {
-        alert("dead");
-        console.log("burh");
+        EndGame();
       }
     }
 
@@ -50330,6 +50327,18 @@ function main() {
     }
   }
 }
+
+function EndGame() {
+  var c = confirm('you died. \n \n Score: ' + score);
+
+  if (c) {
+    window.location.reload();
+  } else {
+    window.close();
+  }
+}
+
+exports.EndGame = EndGame;
 },{"./Snake":"Snake.ts","./Apple":"Apple.ts","pixi.js":"../node_modules/pixi.js/dist/esm/pixi.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -50358,7 +50367,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64929" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65236" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

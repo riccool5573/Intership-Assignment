@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {app, rows, collumns} from './app';
+import {app, rows, collumns, EndGame} from './app';
 
 
 interface segment{ //an interface with all the needed stuff for a segment.
@@ -38,7 +38,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
                 this.row--;
                 this.sprite.angle = 0;
                 if(this.row <= 0){
-                    alert("dead");
+                    EndGame();
                 } 
                 this.UpdatePosition();
                 break;
@@ -46,7 +46,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
                 this.collumn++;
                 this.sprite.angle = 90;
                 if(this.collumn > 21){
-                    alert("dead");
+                    EndGame();
                 } 
                 this.UpdatePosition();
                 break;
@@ -54,7 +54,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
                 this.row++;
                 this.sprite.angle = 180;
                 if(this.row > 21){
-                    alert("dead");
+                    EndGame();
                 } 
                 this.UpdatePosition();
                 break;
@@ -62,7 +62,7 @@ export class SnakeSegment implements segment{ //a class with all the things need
                 this.collumn--;
                 this.sprite.angle = 270
                 if(this.collumn <= 0){
-                    alert("dead");
+                    EndGame();
                 } 
                 this.UpdatePosition();
                 break;

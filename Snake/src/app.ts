@@ -70,16 +70,13 @@ function main(){ //the main function keeps track of the game speed, the players 
         headPos = head.GetPosition(); //get the position of the head and the apple
         Snake.unshift(headPos); //push the position of the head, for later use in the body
         for (let i in body){
-            let x: number = parseInt(i);
+            let x: number = parseInt(i); // go through all the body parts, make sure they are on the right position
             let position: Array<number> = Snake[x + 1]; 
             body[x].row = position[0];
             body[x].collumn = position[1];
             body[x].UpdatePosition();
-            console.log(body[x].position);
-            console.log(headPos);
-            if(body[x].position[0] == headPos[0] && body[x].position[1] == headPos[1]){
-                alert("dead");
-                console.log("burh");
+            if(body[x].position[0] == headPos[0] && body[x].position[1] == headPos[1]){ //then for each bodypart check if its colliding with the head
+                EndGame(); 
             }
         }
         
@@ -91,5 +88,15 @@ function main(){ //the main function keeps track of the game speed, the players 
             body.unshift(segment);
             body[0].Draw("http://127.0.0.1:8887/body_vertical.png");
         }
+    }
+}
+
+export function EndGame(){ //ends the game
+    let c = confirm('you died. \n \n Score: ' + score);
+    if (c){
+        window.location.reload(); //game restarts if "ok" is pressed
+    }
+    else{
+        window.close(); // if cancel is pressed just close the tab
     }
 }
